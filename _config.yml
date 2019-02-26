@@ -9,7 +9,7 @@
 title: 机器智能实验室
 #email: your-email@domain.com
 description: > # this means to ignore newlines until "baseurl:"
-  MiLab
+  Navigating ML
   
   
 baseurl: "MiLab" # the subpath of your site, e.g. /blog
@@ -33,7 +33,7 @@ paginate: 9
 paginate_path: /page:num/
 
 # Tracker
-analytics: UA-129282757-1
+#analytics: UA-129282757-1
 
 # Comments
 disqus: yes
