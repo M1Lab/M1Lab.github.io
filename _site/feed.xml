@@ -1,0 +1,1180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Navigating ML</title>
+    <description>Navigating ML
+</description>
+    <link>http://localhost:4000/navigating-ml/</link>
+    <atom:link href="http://localhost:4000/navigating-ml/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Mon, 03 Dec 2018 07:35:46 -0800</pubDate>
+    <lastBuildDate>Mon, 03 Dec 2018 07:35:46 -0800</lastBuildDate>
+    <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>Data Science Setup</title>
+        <description>&lt;h1 id=&quot;gpu-setup-for-deep-learning&quot;&gt;GPU Setup for Deep Learning&lt;/h1&gt;
+
+&lt;p&gt;The following are some highly rated suggestions.  CPU should be sufficient for some of the excercises, but it is good practice to set up an NVIDIA GPU/CUDA/cuDNN environment at least once to know how to do this when the datasets get bigger.&lt;/p&gt;
+
+&lt;h2 id=&quot;getting-your-environment-set-up&quot;&gt;Getting your Environment Set Up&lt;/h2&gt;
+
+&lt;h3 id=&quot;hardware&quot;&gt;Hardware&lt;/h3&gt;
+
+&lt;p&gt;A decade ago a study was done using molecular dynamics simulations where, even then, they saw significant speed-ups by using an NVIDIA GPU (Graphics Processing Unit), speed-ups of up to 25x programming in the CUDA (compute unified device architecture) language:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;Their computational power exceeds that of the CPU by orders of magnitude:
+while a conventional CPU has a peak performance of around 20 Gigaflops, a NVIDIA GeForce
+8800 Ultra reaches theoretically 500 Gigaflops.&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p align=&quot;right&quot;&gt;J.A. van Meel et al. arXiv. 20 Sept. 2007&lt;/p&gt;
+&lt;p align=&quot;right&quot;&gt;https://arxiv.org/PS_cache/arxiv/pdf/0709/0709.3225v1.pdf&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nowadays, a standard choice is the NVIDIA GTX 1080 for deep learning as well as bitcoin mining, processing at speeds as high as 8,873 GFLOPS.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://images.techhive.com/images/article/2016/05/geforce_gtx_1080_front_pcb_1463236682-100661319-orig.png&quot; alt=&quot;nvidia gtx 1080 image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Another advantage of GPUs is that they use a fraction of the power that their CPU counterparts use.&lt;/p&gt;
+
+&lt;p&gt;Thus accepted options for training deep learning models (in Python even!) are GPU(s) or TPU(s).  Other hardware options include &lt;a href=&quot;https://en.wikipedia.org/wiki/Application-specific_integrated_circuit&quot;&gt;ASIC chips&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;computer-laptop&quot;&gt;Computer-Laptop&lt;/h4&gt;
+
+&lt;p&gt;Anything with a NVIDIA GTX 1060 (GPU) is good if you travel a lot or cannot necessarily depend on wifi.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;E.g.:  https://www.razerzone.com/gaming-systems/razer-blade-pro - plan to get a 1060 w/ 256ssd + 2tb spinner&lt;/li&gt;
+  &lt;li&gt;GTX 1080 (extra $2k; only get if this is your primary machine and you travel a lot/have spotty wifi).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;computer-desktop&quot;&gt;Computer-Desktop&lt;/h4&gt;
+
+&lt;p&gt;Any gaming desktop with a min GTX 1080. &lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Option 1: Custom built.  If you go this route -&amp;gt; Add up your GPU RAM, multiply by 2 for your min RAM.  Get a CPU w/ 48 lanes (so you can go 2 GPUs later).&lt;/li&gt;
+  &lt;li&gt;Option 2: &lt;a href=&quot;https://lambdal.com/products/quad&quot;&gt;https://lambdal.com/products/quad&lt;/a&gt; (this is probably over kill honestly, and your electricity bill might double.  Will make a great space heater)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;computer-remote&quot;&gt;Computer-Remote&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Option 1.  Paperspace.  This is the easiest option.  Go to https://www.paperspace.com/console and sign up for an account.
+    &lt;ul&gt;
+      &lt;li&gt;There are monthly fee plus small GPU Jupyter notebook usage fees for the Gradient 1 option.&lt;/li&gt;
+      &lt;li&gt;Instructions: &lt;strong&gt;Choose Gradient option -&amp;gt; Notebooks -&amp;gt; &lt;em&gt;Paperspace + Fast.AI 0.7.x&lt;/em&gt; -&amp;gt; P4000 -&amp;gt; Create Notebook&lt;/strong&gt; (this will spin up a Jupyter Notebook system, yes its for fast.ai, but it’s a well-set-up option, backed by an NVIDIA GPU and CUDA/cuDNN).&lt;/li&gt;
+      &lt;li&gt;Once you are in the notebook environment, either start a terminal or type in a notebook cell &lt;code class=&quot;highlighter-rouge&quot;&gt;! pip install torch_nightly -f https://download.pytorch.org/whl/nightly/cu92/torch_nightly.html&lt;/code&gt; (the &lt;code class=&quot;highlighter-rouge&quot;&gt;!&lt;/code&gt; is just a way to escape into the OS from a jupyter notebook)&lt;/li&gt;
+      &lt;li&gt;Make sure to stop the notebook server when not using it to avoid incurring unnecessary fees.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Option 2. Use Azure (if you have or want an Azure subscription) and set up a Jupyter notebook system.  This is the more flexible option as you can scale the VM to your choosing, login to the Desktop, or interface through SSH.  You may also add as much extra storage as you need for datasets and whatnot.
+    &lt;ul&gt;
+      &lt;li&gt;It’s suggested to provision a new NC-6 (or NC12) (v3) &lt;a href=&quot;https://docs.microsoft.com/en-us/azure/machine-learning/data-science-virtual-machine/provision-deep-learning-dsvm&quot;&gt;Linux (Ubuntu) Deep Learning Virtual Machine&lt;/a&gt;, updating everything, installing the packages, adding a 1TB HDD data disk (&lt;a href=&quot;https://docs.microsoft.com/en-us/azure/virtual-machines/linux/attach-disk-portal&quot;&gt;add disk to the DSVM&lt;/a&gt;) and kicking off a password protected Jupyter Notebook in a tmux session.  DO NOT put sensitive data on this.  It has open ports, admin rights to the system, is password protected only and it’s not believed to use SSL unless you set up a certificate.  There are other more secure options, though they are more advanced and not covered in this getting started.&lt;/li&gt;
+      &lt;li&gt;A nice getting started video for provisioning a DSVM for Jupyter can be found here: &lt;a href=&quot;https://www.youtube.com/watch?v=4b1G9pQC3KM&quot; target=&quot;_blank&quot;&gt;Video&lt;/a&gt;.&lt;/li&gt;
+      &lt;li&gt;Stop the VM in the Azure Portal when not using it to avoid incurring unnecessary fees.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;iot-test_device-for-inference&quot;&gt;IoT-Test_Device (For Inference)&lt;/h4&gt;
+
+&lt;p&gt;Raspberry Pi v3, Nvidia TX-1, Nvidia TX-2 or Xavier if you have the funds.  If you are feeling adventurous get a few arduinos as well.&lt;/p&gt;
+
+&lt;h3 id=&quot;software&quot;&gt;Software&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Docker for Mac or Docker for Windows (avoid Toolbox)&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.anaconda.com/download/&quot;&gt;Anaconda&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;If you have a GPU
+    &lt;ol&gt;
+      &lt;li&gt;Go to &lt;a href=&quot;https://developer.nvidia.com/cuda-downloads&quot;&gt;CUDA Downloads&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;Join Nvidia Developer program&lt;/li&gt;
+      &lt;li&gt;Update your GPU drivers&lt;/li&gt;
+      &lt;li&gt;Install CUDA &amp;amp; cuDNN&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Install your packages&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;additional-resources&quot;&gt;Additional Resources&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;StackOverflow account&lt;/li&gt;
+  &lt;li&gt;The Stats/ML StackExchange is a useful place to pose questions about ML and stats &lt;a href=&quot;https://stats.stackexchange.com/&quot;&gt;Link&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.novatte.com/our-blog/197-how-to-calculate-peak-theoretical-performance-of-a-cpu-based-hpc-system&quot;&gt;How to calculate peak theoretical performance of a CPU-based HPC system&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Important additional libraries:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Jupyter - &lt;a href=&quot;https://jupyter-notebook.readthedocs.io/en/stable/&quot;&gt;Ref&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;PyTorch - &lt;a href=&quot;https://pytorch.org/&quot;&gt;Ref&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Packages (place in a &lt;code class=&quot;highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt; file in your working conda environment and install all at once with: &lt;code class=&quot;highlighter-rouge&quot;&gt;pip install -r requirements.txt&lt;/code&gt;):&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;jupyter
+scikit-learn
+scikit-image
+seaborn
+torch==0.4.1
+matplotlib
+numpy
+Pillow
+opencv-python
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+</description>
+        <pubDate>Sat, 10 Nov 2018 00:00:00 -0800</pubDate>
+        <link>http://localhost:4000/navigating-ml/setup/</link>
+        <guid isPermaLink="true">http://localhost:4000/navigating-ml/setup/</guid>
+        
+        
+        <category>ds</category>
+        
+        <category>ml</category>
+        
+      </item>
+    
+      <item>
+        <title>Level 1 Preparation</title>
+        <description>&lt;h1 id=&quot;introductory-data-and-neural-network-concepts&quot;&gt;Introductory Data and Neural Network Concepts&lt;/h1&gt;
+
+&lt;p&gt;To begin at this level you should have:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Familiarity with Python 3 for general purpose programming.  See the &lt;a href=&quot;/navigating-ml/learning-python&quot;&gt;Python&lt;/a&gt; section for more.&lt;/li&gt;
+  &lt;li&gt;Working knowledge of traditional ML (when to use what)&lt;/li&gt;
+  &lt;li&gt;Jupyter notebook skills. &lt;a href=&quot;https://jakevdp.github.io/PythonDataScienceHandbook/&quot;&gt;Chapter 1 Python Data Science Handbook&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Get a good grasp of Python for data-related tasks:
+    &lt;ol&gt;
+      &lt;li&gt;How to read data (&lt;code class=&quot;highlighter-rouge&quot;&gt;matplotlib&lt;/code&gt;, Pillow/&lt;code class=&quot;highlighter-rouge&quot;&gt;PIL&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;opencv-python&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;How to manipulate data (&lt;code class=&quot;highlighter-rouge&quot;&gt;numpy&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;pandas&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;scikit-learn&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;How to plot data (&lt;code class=&quot;highlighter-rouge&quot;&gt;matplotlib&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;seaborn&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;Traditional ML (&lt;code class=&quot;highlighter-rouge&quot;&gt;scikit-learn&lt;/code&gt;)&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;concepts-and-resources&quot;&gt;Concepts and Resources&lt;/h2&gt;
+
+&lt;h3 id=&quot;dealing-with-image-data&quot;&gt;Dealing with Image Data&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Read through this excellent first taste of Image Classification from this Stanford CS231n course &lt;a href=&quot;http://cs231n.github.io/classification/&quot;&gt;Ref&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;traditional-ml-for-image-analysis&quot;&gt;Traditional ML for Image Analysis&lt;/h3&gt;
+
+&lt;p&gt;Read through &lt;a href=&quot;http://scikit-image.org/docs/dev/auto_examples/features_detection/plot_hog.html&quot;&gt;this&lt;/a&gt; article on Histogram of Oriented Gradients, an older technique, not often used anymore, but still a quick and easy way to detect objects.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://scikit-image.org/docs/dev/_images/sphx_glr_plot_hog_001.png&quot; alt=&quot;astronaut with hog&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;neural-networks&quot;&gt;Neural Networks&lt;/h3&gt;
+
+&lt;p&gt;Read through &lt;a href=&quot;http://sebastianraschka.com/Articles/2015_singlelayer_neurons.html&quot;&gt;this&lt;/a&gt; excellent explanation of a single-layer neural network.  This information will lay the foundation for these sets of challenges and help you get started from the ground-up, quickly with key concepts and Python code snippets.&lt;/p&gt;
+
+&lt;p&gt;You should now understand the single-layer network, a perceptron, that uses a threshold activation function to perform binary classification:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/rasbt/python-machine-learning-book-2nd-edition/master/code/ch02/images/02_04.png&quot; alt=&quot;perceptron schematic&quot; /&gt;&lt;/p&gt;
+&lt;p align=&quot;right&quot;&gt;Attributed to Sebastian Raschka&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;IMPORTANT:  The perceptron is not capable of performing well on non-linearly separable inputs.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;A multi-layer network, such as the mutli-layer perceptron (MLP), can address the problem of non-linearly separable data.  An MLP, a fully-connected set of perceptrons organized into layers, can also have arbitrary activation functions making it more verstatile for classification and regression problems.  These sorts of networks are also known as dense neural networks and the layers as fully-connected.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/rasbt/python-machine-learning-book-2nd-edition/master/code/ch12/images/12_02.png&quot; alt=&quot;multi-layer network&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Read &lt;a href=&quot;https://en.wikipedia.org/wiki/Multilayer_perceptron&quot;&gt;this article&lt;/a&gt; for  additional information.&lt;/p&gt;
+
+&lt;h2 id=&quot;tools&quot;&gt;Tools&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Git and GitHub for version control.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;additional-resources&quot;&gt;Additional Resources&lt;/h2&gt;
+
+&lt;h3 id=&quot;scikit-learn&quot;&gt;Scikit-Learn&lt;/h3&gt;
+
+&lt;p&gt;Excellent 3-hr scikit-learn tutorials from PyCon 2015:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Watch &lt;a href=&quot;https://www.youtube.com/watch?v=L7R4HUQ-eQ0&quot;&gt;this&lt;/a&gt; scikit-learn tutorial by Jake VanderPlas (Part 1) and &lt;a href=&quot;https://www.youtube.com/watch?v=oGqGxvqA9-k&quot;&gt;the next&lt;/a&gt; tutorial by Olivier Grisel (Part 2).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Learn about ML and Python scikit-learn in this &lt;a href=&quot;https://www.youtube.com/playlist?list=PL5-da3qGB5ICeMbQuqbbCOQWcS6OYBr5A&quot;&gt;video series&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 09 Nov 2018 00:00:00 -0800</pubDate>
+        <link>http://localhost:4000/navigating-ml/level1_prep/</link>
+        <guid isPermaLink="true">http://localhost:4000/navigating-ml/level1_prep/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Level 1 Practice</title>
+        <description>&lt;h1 id=&quot;going-from-prebuilt-ml-tools-to-first-custom-ml&quot;&gt;Going from Prebuilt ML Tools to First Custom ML&lt;/h1&gt;
+
+&lt;p&gt;It is recommended that you have completed the &lt;a href=&quot;/navigating-ml/level1_prep&quot;&gt;Level 1 Preparation&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In this first set of practice problems you’ll learn about basic ML and neural networks, hands-on, with Jupyter notebooks and Python.  You’ll be introduced to &lt;code class=&quot;highlighter-rouge&quot;&gt;scikit-learn&lt;/code&gt; and PyTorch as Python packages commonly used in data manipulation and data science.&lt;/p&gt;
+
+&lt;p&gt;Here and throughout these practice exercises you’ll work with the following image datasets: COCO, Fashion MNIST, the Hymenoptera insect and a few custom ones you create.&lt;/p&gt;
+
+&lt;h2 id=&quot;first-ml-with-custom-vision-service&quot;&gt;First ML with Custom Vision Service&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Download the COCO 2017 Val dataset (1 GB) &lt;a href=&quot;http://cocodataset.org/#download&quot;&gt;here&lt;/a&gt; to get a set of real-life images (click on “2017 Val images [5K/1GB]”).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Pick 50-100 images to upload, some with people and some without (create a balanced dataset).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Build a person/no-person image classifier using Microsoft’s &lt;a href=&quot;https://customvision.ai/&quot;&gt;https://customvision.ai/&lt;/a&gt; (choose “multiclass” classification using the “general” domain) - directions on the &lt;a href=&quot;https://docs.microsoft.com/en-us/azure/cognitive-services/custom-vision-service/getting-started-build-a-classifier&quot;&gt;Docs&lt;/a&gt; page.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Observe performace metrics under the “Performance” tab.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://nlpforhackers.io/wp-content/uploads/2017/01/Precision-Recall.png&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Some defintions.  &lt;strong&gt;Precision&lt;/strong&gt;:  if a tag is precicted by your classifier, how likely is it that it is right?  &lt;strong&gt;Recall&lt;/strong&gt;:  out of the tags that should be classified as right, what percentage did your classifier correctly find?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Square-pad all of the images and build a new classifier under a new project in Custom Vision.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Original:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/coco_sample.jpg&quot; width=&quot;50%&quot; /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Square-padded by expanding:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/coco_sample__pad.jpg&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;How do the performance metrics change?  Did they get worse or better and why do you think that is?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;first-custom-ml-open-source-tools&quot;&gt;First Custom ML (Open Source Tools)&lt;/h2&gt;
+
+&lt;p&gt;For these two problems, it is recommended to go through the code from the original source line by line in whatever fashion you see fit so that you really understand what is going on.&lt;/p&gt;
+
+&lt;p&gt;TIPS:  Place all imports at the top of the notebook.  Call the training data something consistent thoughout all of your work (X_train -&amp;gt; training data, y_train -&amp;gt; labels, X_test -&amp;gt; test data…).&lt;/p&gt;
+
+&lt;h3 id=&quot;image-classification-with-classical-ml&quot;&gt;Image Classification with Classical ML&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/fashion_sample.png&quot; alt=&quot;fashion dataset sample&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Create a Python program to classify images from Fashion MNIST Dataset (get &lt;a href=&quot;https://github.com/zalandoresearch/fashion-mnist&quot;&gt;here&lt;/a&gt;) leveraging code samples from the Python Data Science Handbook - &lt;a href=&quot;https://jakevdp.github.io/PythonDataScienceHandbook/05.02-introducing-scikit-learn.html#Application:-Exploring-Hand-written-Digits&quot;&gt;Ref&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Refer to Chapter 2 and 3 of the Python Data Science Handbook for information on data manipulation in Python if not already familiar.&lt;/p&gt;
+
+&lt;p&gt;Do this in a Jupyter notebook (any service or locally) - recall you learned about this tool in the &lt;a href=&quot;/navigating-ml/setup&quot;&gt;Setup&lt;/a&gt; section.&lt;/p&gt;
+
+&lt;p&gt;Steps:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Visualize a sample of 50-100 images with labels&lt;/li&gt;
+  &lt;li&gt;Try fitting a Gaussian naive Bayes model.  How does it compare results found in the Handbook for the MNIST Digits datset (a black and white 8x8 pixel dataset of handwritten digits)?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Additionally:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Which fashion item has the best accuracy, which the worst?  Use a confusion matrix.  Why do you think that is?  Is there a way you could imagine improving this model?&lt;/li&gt;
+  &lt;li&gt;Normalize the images (in &lt;code class=&quot;highlighter-rouge&quot;&gt;sklearn&lt;/code&gt;) and check the accuracy of the model(s) again.  Did it improve or worsen?&lt;/li&gt;
+  &lt;li&gt;Try a different model - SVM or Random Forest&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;image-classification-with-basic-neural-nets&quot;&gt;Image Classification with Basic Neural Nets&lt;/h3&gt;
+
+&lt;p&gt;The purpose of the Basic Neural Nets exercises are to familiarize you with how a simple artificial neuron works all from the ground-up - this knowledge will serve you well.  See &lt;a href=&quot;/navigating-ml/level1_prep&quot;&gt;Level 1 Preparation&lt;/a&gt; for more information.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Adapt a from-scratch Perceptron as in this &lt;a href=&quot;https://github.com/rasbt/python-machine-learning-book-2nd-edition/blob/master/code/ch02/ch02.ipynb&quot;&gt;Jupyter notebook&lt;/a&gt; to train and 
+test on the Fashion MNIST dataset.&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;Does the model converge or not (plot the training and validation error)?&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Adapt a from-scratch Multilayer Perceptron (MLP) as in this &lt;a href=&quot;https://github.com/rasbt/python-machine-learning-book-2nd-edition/blob/master/code/ch12/ch12.ipynb&quot;&gt;Jupyter notebook&lt;/a&gt;&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;Try it again with the &lt;code class=&quot;highlighter-rouge&quot;&gt;scikit-learn&lt;/code&gt; MLP class.&lt;/li&gt;
+      &lt;li&gt;Does the model converge now?  What accuracy does the model achieve?&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;object-detection-with-histogram-of-oriented-gradients&quot;&gt;Object Detection with Histogram of Oriented Gradients&lt;/h3&gt;
+
+&lt;p&gt;Create a Python program to detect bear faces (perhaps you’re builing a bear watch app for safety in the woods) by leveraging code samples from this &lt;a href=&quot;https://jakevdp.github.io/PythonDataScienceHandbook/05.14-image-features.html&quot; target=&quot;_blank&quot;&gt;Python Data Science Handbook notebook&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/bear_face_hog.png&quot; alt=&quot;bear face with hog&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Collect 50-100 images of bear faces from the web and square-pad them as done for the COCO images above.  In addition, resize them to the same shape (228x228 for example).  Observe, that in the code sample, the shape of the final image data for training will be (100, 228, 228) if 100 samples are collected.  These constitute the “positive” training samples.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;An example of the image pre-processing (padding is up to you):&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;data_array&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Get image files
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;img_files&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;glob&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;glob&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'../../data/bears_pad/*.*'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;img&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;img_files&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;im&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;img&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Resize to uniform size
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;im&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;im&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;228&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;228&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Convert to only grayscale in case of an alpha channel
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;im&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;im&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;convert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'L'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;im&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asarray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;im&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;data_array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;im&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Convert collection to numpy array
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;positive_patches&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asarray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data_array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;positive_patches&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The rest of the steps are outlined as follows (as described in the Handbook):&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Obtain a set of image thumbnails of non-faces to constitute “negative” training samples.&lt;/li&gt;
+  &lt;li&gt;Extract HOG features from these training samples.&lt;/li&gt;
+  &lt;li&gt;Train a linear SVM classifier on these samples.&lt;/li&gt;
+  &lt;li&gt;For an “unknown” image, pass a sliding window across the image, using the model to evaluate whether that window contains a face or not.&lt;/li&gt;
+  &lt;li&gt;If detections overlap, combine them into a single window.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Additionally:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;What other confounding factors are there for images other than illumination, you think?&lt;/li&gt;
+  &lt;li&gt;Plot the original image along with the &lt;code class=&quot;highlighter-rouge&quot;&gt;skimage.rgb2gray&lt;/code&gt; version and the HOG representation.  See how this works in &lt;code class=&quot;highlighter-rouge&quot;&gt;matplotlib&lt;/code&gt;.  What does &lt;code class=&quot;highlighter-rouge&quot;&gt;skimage.rgb2gray&lt;/code&gt; actually do?&lt;/li&gt;
+  &lt;li&gt;Try out the model on the entire test image.  What do you find out?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;A cursory result might be (after varying window sizes):
+&lt;img src=&quot;../images/bear_with_bboxes2.png&quot; alt=&quot;model prediction&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Try using sliding windows with a variety of sizes (and aspect ratios).  What do you find out?&lt;/li&gt;
+  &lt;li&gt;Augment the data to expand the training and test datasets (e.g. use a library like &lt;code class=&quot;highlighter-rouge&quot;&gt;imgaug&lt;/code&gt; to left-right flip, blur, contrast normalize, etc.) and retrain and test.  How does the performance change and why is that?&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Extra credit&lt;/strong&gt;:  Implement Non-Maximum Suppression in Python to find the single best bounding box of a group of bounding boxes as are found above.  Apply this to the test image.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;additional-help&quot;&gt;Additional Help&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;StackOverflow with &lt;code class=&quot;highlighter-rouge&quot;&gt;sklearn&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;jupyter&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;For Custom Vision you can email customvisionteam@microsoft.com.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Thu, 08 Nov 2018 00:00:00 -0800</pubDate>
+        <link>http://localhost:4000/navigating-ml/level1_practice/</link>
+        <guid isPermaLink="true">http://localhost:4000/navigating-ml/level1_practice/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Level 2 Preparation</title>
+        <description>&lt;h1 id=&quot;introduction-to-simple-and-convolutional-neural-networks&quot;&gt;Introduction to Simple and Convolutional Neural Networks&lt;/h1&gt;
+
+&lt;h2 id=&quot;classification-concepts-and-simple-nns&quot;&gt;Classification Concepts and Simple NNs&lt;/h2&gt;
+
+&lt;p&gt;Read through this excellent first taste of Image Classification from this Stanford CS231n course or, alternatively, watch the video (&lt;a href=&quot;http://cs231n.github.io/classification/&quot; target=&quot;_blank&quot;&gt;Lecture Notes&lt;/a&gt; or &lt;a href=&quot;https://www.youtube.com/watch?v=OoUX-nOEjG0&amp;amp;index=3&amp;amp;t=0s&amp;amp;list=PLzUTmXVwsnXod6WNdg57Yc3zFx_f-RYsq&quot; target=&quot;_blank&quot;&gt;Video&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;Remind yourself of the MLP from Level 1 Practice (&lt;a href=&quot;https://github.com/rasbt/python-machine-learning-book-2nd-edition/blob/master/code/ch12/ch12.ipynb&quot; target=&quot;_blank&quot;&gt;Code&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;Now, explain the difference between the following two classes, the first a Nearest Neighbor class and the second a simple neural network called a Multi-Layer Perceptron:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;NearestNeighbor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot; X is N x D where each row is an example. Y is 1-dimension of size N &quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# the nearest neighbor classifier simply remembers all the training data
+&lt;/span&gt;    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Xtr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;
+    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ytr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;predict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot; X is N x D where each row is an example we wish to predict label for &quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;num_test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# lets make sure that the output type matches the input type
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;Ypred&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zeros&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;num_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dtype&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ytr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dtype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# loop over all test rows
+&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;xrange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;num_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# find the nearest training image to the i'th test image
+&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;# using the L1 distance (sum of absolute value differences)
+&lt;/span&gt;      &lt;span class=&quot;n&quot;&gt;distances&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;abs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Xtr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,:]),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;axis&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;min_index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argmin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;distances&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# get the index with smallest distance
+&lt;/span&gt;      &lt;span class=&quot;n&quot;&gt;Ypred&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ytr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;min_index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# predict the label of the nearest example
+&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Ypred&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p align=&quot;right&quot;&gt;Source:  http://cs231n.github.io/classification/&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;NeuralNetMLP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot; Feedforward neural network / Multi-layer perceptron classifier.
+    Parameters
+    ------------
+    n_hidden : int (default: 30)
+        Number of hidden units.
+    l2 : float (default: 0.)
+        Lambda value for L2-regularization.
+        No regularization if l2=0. (default)
+    epochs : int (default: 100)
+        Number of passes over the training set.
+    eta : float (default: 0.001)
+        Learning rate.
+    shuffle : bool (default: True)
+        Shuffles training data every epoch if True to prevent circles.
+    minibatch_size : int (default: 1)
+        Number of training samples per minibatch.
+    seed : int (default: None)
+        Random seed for initalizing weights and shuffling.
+    Attributes
+    -----------
+    eval_ : dict
+      Dictionary collecting the cost, training accuracy,
+      and validation accuracy for each epoch during training.
+    &quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n_hidden&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                 &lt;span class=&quot;n&quot;&gt;l2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;epochs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.001&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                 &lt;span class=&quot;n&quot;&gt;shuffle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minibatch_size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;seed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;random&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;RandomState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;seed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_hidden&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n_hidden&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l2&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;epochs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;epochs&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shuffle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shuffle&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minibatch_size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minibatch_size&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;_onehot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n_classes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Encode labels into one-hot representation
+        Parameters
+        ------------
+        y : array, shape = [n_samples]
+            Target values.
+        Returns
+        -----------
+        onehot : array, shape = (n_samples, n_labels)
+        &quot;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;onehot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zeros&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_classes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;onehot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1.&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onehot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;_sigmoid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Compute logistic function (sigmoid)&quot;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1.&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;250&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;250&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;_forward&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Compute forward propagation step&quot;&quot;&quot;&lt;/span&gt;
+
+        &lt;span class=&quot;c1&quot;&gt;# step 1: net input of hidden layer
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# [n_samples, n_features] dot [n_features, n_hidden]
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# -&amp;gt; [n_samples, n_hidden]
+&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;z_h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b_h&lt;/span&gt;
+
+        &lt;span class=&quot;c1&quot;&gt;# step 2: activation of hidden layer
+&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;a_h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_sigmoid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;z_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+        &lt;span class=&quot;c1&quot;&gt;# step 3: net input of output layer
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# [n_samples, n_hidden] dot [n_hidden, n_classlabels]
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# -&amp;gt; [n_samples, n_classlabels]
+&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;z_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w_out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b_out&lt;/span&gt;
+
+        &lt;span class=&quot;c1&quot;&gt;# step 4: activation output layer
+&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;a_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_sigmoid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;z_out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z_out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a_out&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;_compute_cost&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_enc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Compute cost function.
+        Parameters
+        ----------
+        y_enc : array, shape = (n_samples, n_labels)
+            one-hot encoded class labels.
+        output : array, shape = [n_samples, n_output_units]
+            Activation of the output layer (forward propagation)
+        Returns
+        ---------
+        cost : float
+            Regularized cost
+        &quot;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;L2_term&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;
+                   &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w_h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;2.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;2.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;term1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y_enc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;term2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_enc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;cost&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;term1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;term2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;L2_term&lt;/span&gt;
+
+        &lt;span class=&quot;c1&quot;&gt;# If you are applying this cost function to other
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# datasets where activation
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# values maybe become more extreme (closer to zero or 1)
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# you may encounter &quot;ZeroDivisionError&quot;s due to numerical
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# instabilities in Python &amp;amp; NumPy for the current implementation.
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# I.e., the code tries to evaluate log(0), which is undefined.
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# To address this issue, you could add a small constant to the
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# activation values that are passed to the log function.
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;#
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# For example:
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;#
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# term1 = -y_enc * (np.log(output + 1e-5))
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# term2 = (1. - y_enc) * np.log(1. - output + 1e-5)
+&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cost&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;predict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Predict class labels
+        Parameters
+        -----------
+        X : array, shape = [n_samples, n_features]
+            Input layer with original features.
+        Returns:
+        ----------
+        y_pred : array, shape = [n_samples]
+            Predicted class labels.
+        &quot;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;z_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z_out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_forward&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;y_pred&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argmax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;z_out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;axis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_pred&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X_valid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_valid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot; Learn weights from training data.
+        Parameters
+        -----------
+        X_train : array, shape = [n_samples, n_features]
+            Input layer with original features.
+        y_train : array, shape = [n_samples]
+            Target class labels.
+        X_valid : array, shape = [n_samples, n_features]
+            Sample features for validation during training
+        y_valid : array, shape = [n_samples]
+            Sample labels for validation during training
+        Returns:
+        ----------
+        self
+        &quot;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;n_output&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unique&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# number of class labels
+&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;n_features&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X_train&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+        &lt;span class=&quot;c1&quot;&gt;########################
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# Weight initialization
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;########################
+&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# weights for input -&amp;gt; hidden
+&lt;/span&gt;        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b_h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zeros&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_hidden&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w_h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;normal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scale&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                      &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_features&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_hidden&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+        &lt;span class=&quot;c1&quot;&gt;# weights for hidden -&amp;gt; output
+&lt;/span&gt;        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zeros&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;normal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scale&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                        &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_hidden&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n_output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;epoch_strlen&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;epochs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# for progress formatting
+&lt;/span&gt;        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eval_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'cost'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'train_acc'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'valid_acc'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]}&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;y_train_enc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_onehot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n_output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+        &lt;span class=&quot;c1&quot;&gt;# iterate over training epochs
+&lt;/span&gt;        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;epochs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+
+            &lt;span class=&quot;c1&quot;&gt;# iterate over minibatches
+&lt;/span&gt;            &lt;span class=&quot;n&quot;&gt;indices&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X_train&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shuffle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shuffle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;indices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start_idx&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;indices&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minibatch_size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+                                   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minibatch_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;batch_idx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;indices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_idx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minibatch_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+                &lt;span class=&quot;c1&quot;&gt;# forward propagation
+&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;z_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z_out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_forward&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;batch_idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+
+                &lt;span class=&quot;c1&quot;&gt;##################
+&lt;/span&gt;                &lt;span class=&quot;c1&quot;&gt;# Backpropagation
+&lt;/span&gt;                &lt;span class=&quot;c1&quot;&gt;##################
+&lt;/span&gt;
+                &lt;span class=&quot;c1&quot;&gt;# [n_samples, n_classlabels]
+&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;sigma_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_train_enc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;batch_idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+                &lt;span class=&quot;c1&quot;&gt;# [n_samples, n_hidden]
+&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;sigmoid_derivative_h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a_h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+                &lt;span class=&quot;c1&quot;&gt;# [n_samples, n_classlabels] dot [n_classlabels, n_hidden]
+&lt;/span&gt;                &lt;span class=&quot;c1&quot;&gt;# -&amp;gt; [n_samples, n_hidden]
+&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;sigma_h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sigma_out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w_out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;
+                           &lt;span class=&quot;n&quot;&gt;sigmoid_derivative_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+                &lt;span class=&quot;c1&quot;&gt;# [n_features, n_samples] dot [n_samples, n_hidden]
+&lt;/span&gt;                &lt;span class=&quot;c1&quot;&gt;# -&amp;gt; [n_features, n_hidden]
+&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;grad_w_h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;batch_idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sigma_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;grad_b_h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sigma_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;axis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+                &lt;span class=&quot;c1&quot;&gt;# [n_hidden, n_samples] dot [n_samples, n_classlabels]
+&lt;/span&gt;                &lt;span class=&quot;c1&quot;&gt;# -&amp;gt; [n_hidden, n_classlabels]
+&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;grad_w_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a_h&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sigma_out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;grad_b_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sigma_out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;axis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+                &lt;span class=&quot;c1&quot;&gt;# Regularization and weight updates
+&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;delta_w_h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grad_w_h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;delta_b_h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grad_b_h&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# bias is not regularized
+&lt;/span&gt;                &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w_h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delta_w_h&lt;/span&gt;
+                &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b_h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delta_b_h&lt;/span&gt;
+
+                &lt;span class=&quot;n&quot;&gt;delta_w_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grad_w_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w_out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;delta_b_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grad_b_out&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# bias is not regularized
+&lt;/span&gt;                &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delta_w_out&lt;/span&gt;
+                &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delta_b_out&lt;/span&gt;
+
+            &lt;span class=&quot;c1&quot;&gt;#############
+&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;# Evaluation
+&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;#############
+&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;# Evaluation after each epoch during training
+&lt;/span&gt;            &lt;span class=&quot;n&quot;&gt;z_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a_h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z_out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_forward&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;cost&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_compute_cost&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y_enc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y_train_enc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                      &lt;span class=&quot;n&quot;&gt;output&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a_out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+            &lt;span class=&quot;n&quot;&gt;y_train_pred&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;predict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;y_valid_pred&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;predict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X_valid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+            &lt;span class=&quot;n&quot;&gt;train_acc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y_train&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_train_pred&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;astype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;
+                         &lt;span class=&quot;n&quot;&gt;X_train&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;valid_acc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y_valid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_valid_pred&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;astype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;
+                         &lt;span class=&quot;n&quot;&gt;X_valid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+
+            &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stderr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\r&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%0*&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d | Cost: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%.2&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f '&lt;/span&gt;
+                             &lt;span class=&quot;s&quot;&gt;'| Train/Valid Acc.: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%.2&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%.2&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%% &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;
+                             &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;epoch_strlen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;epochs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cost&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                              &lt;span class=&quot;n&quot;&gt;train_acc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;valid_acc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stderr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;flush&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eval_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'cost'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cost&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eval_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'train_acc'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;train_acc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eval_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'valid_acc'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;valid_acc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p align=&quot;right&quot;&gt;Source:  https://github.com/rasbt/python-machine-learning-book-2nd-edition/blob/master/code/ch12/ch12.ipynb&lt;/p&gt;
+
+&lt;h2 id=&quot;convolutional-neural-networks&quot;&gt;Convolutional Neural Networks&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;ConvNet architectures make the explicit assumption that the inputs are images, which allows us to encode certain properties into the architecture. These then make the forward function more efficient to implement and vastly reduce the amount of parameters in the network.&lt;/em&gt; –CS231n Course&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Read or watch the following Stanford CS231n Lecture for an in-depth introduction to convolutional neural networks (ConvNets/CNNs).  At the end of this 1-hr investment of time, you will have a thorough conceptual and practical understanding of CNNs and a good foundation to set forth proper applications of this type of NN architecture to images and other types of inputs (yes, CNNs have been used for music, speech and more):&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://cs231n.github.io/convolutional-networks/&quot; target=&quot;_blank&quot;&gt;Lecture Notes&lt;/a&gt; or &lt;a href=&quot;https://www.youtube.com/watch?v=bNb2fEVKeEo&amp;amp;index=6&amp;amp;t=0s&amp;amp;list=PLzUTmXVwsnXod6WNdg57Yc3zFx_f-RYsq&quot; target=&quot;_blank&quot;&gt;Video&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Extra reading:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://colah.github.io/posts/2014-07-Understanding-Convolutions/&quot; target=&quot;_blank&quot;&gt;Convolutions - what are they&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://colah.github.io/posts/2014-07-Conv-Nets-Modular/&quot; target=&quot;_blank&quot;&gt;CNNs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Learn concepts around neural networks for image applications and be able to answer these questions:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Should you use the test set for hyperparameter tuning?  What is the purpose of the validation set?&lt;/li&gt;
+  &lt;li&gt;List the differences between a Convolutional (ConvNet/CNN) and regular Dense Neural Network (e.g Multilayer Perceptron)&lt;/li&gt;
+  &lt;li&gt;List and give examples of the tunable hyperparameters one can find in a ConvNet.&lt;/li&gt;
+  &lt;li&gt;How can transfer learning speed up training?  If a network is already built, is it possible to modify it for a different number of output classes?&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Gain familiarity with the PyTorch deep learning framework as it will be used in the Practice section so we can escape the use of CPU-bound &lt;code class=&quot;highlighter-rouge&quot;&gt;numpy&lt;/code&gt; tensors for everything:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;PyTorch tensor vs. numpy array (see the PyTorch &lt;a href=&quot;https://pytorch.org/tutorials/beginner/pytorch_with_examples.html&quot;&gt;Docs&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;Transfer Learning with a CNN (how it often happens as CNNs can be big and take time and power to train from scratch)
+    &lt;ul&gt;
+      &lt;li&gt;Understand what is going on in this code snippet (from &lt;a href=&quot;https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html&quot;&gt;Docs&lt;/a&gt;):
+        &lt;pre&gt;&lt;code class=&quot;language-pythonn&quot;&gt;model_ft = models.resnet18(pretrained=True)
+num_ftrs = model_ft.fc.in_features
+model_ft.fc = nn.Linear(num_ftrs, 2)
+&lt;/code&gt;&lt;/pre&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Tue, 06 Nov 2018 00:00:00 -0800</pubDate>
+        <link>http://localhost:4000/navigating-ml/level2_prep/</link>
+        <guid isPermaLink="true">http://localhost:4000/navigating-ml/level2_prep/</guid>
+        
+        
+        <category>ds</category>
+        
+        <category>ml</category>
+        
+      </item>
+    
+      <item>
+        <title>Level 2 Practice</title>
+        <description>&lt;h1 id=&quot;intermediate-practice-with-deep-learning&quot;&gt;Intermediate Practice with Deep Learning&lt;/h1&gt;
+
+&lt;p&gt;It is recommended that you have completed the &lt;a href=&quot;/navigating-ml/level2_prep&quot;&gt;Level 2 Preparation&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In this intermediate set of problems, you’ll apply what you’ve learned in the Level 2 Preparation section.  You’ll utilize your bear and COCO dataset with an MLP and CNN in PyTorch, including and introduction to transfer learning.&lt;/p&gt;
+
+&lt;h2 id=&quot;adapt-a-multilayer-perceptron-and-cnn&quot;&gt;Adapt a Multilayer Perceptron and CNN&lt;/h2&gt;
+
+&lt;h3 id=&quot;image-classification&quot;&gt;Image Classification&lt;/h3&gt;
+
+&lt;p&gt;Instructions to practice image classification with PyTorch&lt;/p&gt;
+
+&lt;h4 id=&quot;setup&quot;&gt;Setup&lt;/h4&gt;
+
+&lt;p&gt;Let’s dive into some data and code.  Open a Jupyter session or log into the Jupyter system&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;In a code cell &lt;code class=&quot;highlighter-rouge&quot;&gt;! git clone https://github.com/rasbt/deep-learning-book.git&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Navigate to this directory:  &lt;code class=&quot;highlighter-rouge&quot;&gt;/code/model_zoo/pytorch_ipynb&lt;/code&gt; where we will operate.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;data&quot;&gt;Data&lt;/h4&gt;
+
+&lt;p&gt;We will work with your square-padded bears dataset from Level 1 (if you do not have these, go to Level 1 and set up the datasets) and a similar number of the square-padded COCO images (ones that are not images of a bear, of course - remove any that are here because there are some sneaky bears in COCO).&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Set up the following data folder structure where the notebooks live:
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  data/train/bear
+  data/train/not_bear
+  data/test/bear
+  data/test/not_bear
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Place all, but 5 of the square-padded images of bears, into &lt;code class=&quot;highlighter-rouge&quot;&gt;data/train/bear&lt;/code&gt;.  Place all but 5 square-padded images of non-bear from a subset of COCO, into &lt;code class=&quot;highlighter-rouge&quot;&gt;data/train/not_bear&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Place the remaining bear images into the &lt;code class=&quot;highlighter-rouge&quot;&gt;data/test/bear&lt;/code&gt; and likewise with the non-bear images, but into &lt;code class=&quot;highlighter-rouge&quot;&gt;data/test/not_bear&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;train-a-multi-layer-perceptron&quot;&gt;Train a Multi-Layer Perceptron&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Open the &lt;code class=&quot;highlighter-rouge&quot;&gt;multilayer-perceptron.ipynb&lt;/code&gt; notebook&lt;/li&gt;
+  &lt;li&gt;Modify the notebook in the right places to work with your bear dataset - check out the usage of torchvisions &lt;code class=&quot;highlighter-rouge&quot;&gt;datasets.ImageFolder&lt;/code&gt; (&lt;a href=&quot;https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html#load-data&quot; target=&quot;_blank&quot;&gt;Example&lt;/a&gt;) for easily creating a PyTorch-compatible dataset based on folder structures upon which the data loaders can work (the folder structures serve as the labels!).&lt;/li&gt;
+  &lt;li&gt;Make sure to add &lt;code class=&quot;highlighter-rouge&quot;&gt;transforms&lt;/code&gt; to “Resize” the input.  Try out other transforms as well as you go along to see if there are improvements in the accuracy.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Most deep learning frameworks have their own dataset formats - often several.  PyTorch has many standard readers for data as well as an object oriented guideline to create custom datasets that work with the PyTorch data loaders.  It can thus be very flexible.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Look at the mathematical notations in the notebook in the model definition to figure out the final FC layer size - you will see errors otherwise.&lt;/li&gt;
+  &lt;li&gt;A few other hyperparameters may need to be looked at.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;train-a-cnn-vgg16&quot;&gt;Train a CNN (VGG16)&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Do the same as above, but with the &lt;code class=&quot;highlighter-rouge&quot;&gt;convnet-vgg16.ipynb&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;VGG16 has the following architecture (VGGNet was the runner-up of the ILSVRC 2014 competition, a.k.a., the ImageNet challenge).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://cdn-images-1.medium.com/max/1600/0*V1muWIDnPVwZUuEv.png&quot; alt=&quot;vgg16&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Add the following transform to the &lt;code class=&quot;highlighter-rouge&quot;&gt;train&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;test&lt;/code&gt; dataset instantiation.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;transform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;transforms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Compose&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;transforms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Resize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+                                                                  &lt;span class=&quot;n&quot;&gt;transforms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ToTensor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;
+                                                                  &lt;span class=&quot;n&quot;&gt;transforms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Normalize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.485&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.456&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.406&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+                                                                     &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.229&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.224&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.225&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])])&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Why are we resizing to 32x32 pixels?&lt;/li&gt;
+  &lt;li&gt;Wny is the test accuracy so low in the above cases?&lt;/li&gt;
+  &lt;li&gt;How would you modify the network in the case of 228x228 3-channel input (say you Resize to 228)?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;transfer-learning-with-pytorch&quot;&gt;Transfer Learning with PyTorch&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/tl_bear_not_bear.png&quot; alt=&quot;bear not bear&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Transfer learning can address the issue of small datasets by starting with pre-trained weights, weights that get us closer to recognizing objects that we are wishing to classify, instead of starting with random weights on our parameters.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Note, if your objects differ significantly from the objects upon which the pre-trained network was originally trained (usually ImageNet or COCO), some more data may be needed as well as potentially unfreezing more layers for fine-tuning.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Modify &lt;a href=&quot;https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html&quot; target=&quot;_blank&quot;&gt;this&lt;/a&gt; PyTorch tutorial to work with VGG16 and the bear/not_bear dataset you have come to enjoy.  You may need to take a look at the layers of VGG16 found in the following, to decide how to modify the last layer for different output size (i.e. different number of classes).&lt;/p&gt;
+
+&lt;p&gt;Note, the &lt;code class=&quot;highlighter-rouge&quot;&gt;model_object.classifier&lt;/code&gt; is actually a sequential list of fully connected layers (see diagram above).  Also, to see this classifier defined, you can take a look at:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;model_object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;classifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_modules&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Additionally, defining a new layer will have a grad function and gradients enabled by default for backprop.  What must you do to freeze the layers before the last layer so that you are only fine-tuning on that last layer?&lt;/p&gt;
+
+&lt;p&gt;Once you’ve worked out the updates, train the model on your bear/no bear data.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;How much has the result improved?&lt;/li&gt;
+  &lt;li&gt;If you wished to “unfreeze” more than the last layer, how would you do so?&lt;/li&gt;
+  &lt;li&gt;If you had 3 classes instead of 2, how would you modify the network architecture?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;additional-help&quot;&gt;Additional Help&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;PyTorch forums - &lt;a href=&quot;https://discuss.pytorch.org/&quot;&gt;Ref&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;StackOverflow with &lt;code class=&quot;highlighter-rouge&quot;&gt;pytorch&lt;/code&gt; tag&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Mon, 05 Nov 2018 00:00:00 -0800</pubDate>
+        <link>http://localhost:4000/navigating-ml/level2_practice/</link>
+        <guid isPermaLink="true">http://localhost:4000/navigating-ml/level2_practice/</guid>
+        
+        
+        <category>ds</category>
+        
+        <category>ml</category>
+        
+      </item>
+    
+      <item>
+        <title>Level 3 Preparation</title>
+        <description>&lt;h1 id=&quot;advanced-preparation&quot;&gt;Advanced Preparation&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.youtube.com/playlist?list=PL3FW7Lu3i5JvHM8ljYj-zLfQRF3EO8sYv&quot;&gt;Videos&lt;/a&gt; from a CNN &lt;a href=&quot;http://cs231n.stanford.edu/&quot;&gt;Course&lt;/a&gt; out of Stanford&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.youtube.com/playlist?list=PLkDaE6sCZn6Gl29AoE31iwdVwSG-KnDzF&quot;&gt;Videos&lt;/a&gt; by Andrew Ng on Image Tasks&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Data loading in PyTorch:  &lt;a href=&quot;https://pytorch.org/tutorials/beginner/data_loading_tutorial.html&quot;&gt;Tutorial&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Sat, 03 Nov 2018 00:00:00 -0700</pubDate>
+        <link>http://localhost:4000/navigating-ml/level3_prep/</link>
+        <guid isPermaLink="true">http://localhost:4000/navigating-ml/level3_prep/</guid>
+        
+        
+        <category>ds</category>
+        
+        <category>ml</category>
+        
+      </item>
+    
+      <item>
+        <title>Level 3 Practice</title>
+        <description>&lt;h1 id=&quot;advanced-deep-learning-with-pytorch&quot;&gt;Advanced Deep Learning with PyTorch&lt;/h1&gt;
+
+&lt;p&gt;In this advanced excercise, the instructions will be a little more vague and you’ll need to go figure find out much on your own, part of the learning and challenge.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Why do this task&lt;/em&gt;:  Usually, beginner tutorials around ML and neural networks begin with classifying hand-written digits from the MNIST dataset or CIFAR-10.  We are going to begin with something more challenging and much of it will be dealing with data, labeling and data formats.  This is to simulate how life will likely be in real life and it’s hoped you will learn how to create machine learning models more effectively and quickly in the real world. The reason to work through the following is:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;It will force you to read and learn from scratch.  You will learn the different label file formats, deserializers and how things compute. &lt;/li&gt;
+  &lt;li&gt;For for example, in energy/manufacturing you will get .png or .jpg or .tiff files and not stuff already in the perfect format.  You may even get video data.&lt;/li&gt;
+  &lt;li&gt;Learning this will help you understand the concept of “Data Packing”. &lt;/li&gt;
+  &lt;li&gt;This is not the simplest way, but it forces greater learning.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;working-with-pytorch-on-more-complex-data&quot;&gt;Working with PyTorch on More Complex Data&lt;/h2&gt;
+
+&lt;p&gt;See &lt;a href=&quot;/navigating-ml/setup&quot;&gt;Setup&lt;/a&gt; for more instructions on how to&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;In the real world, data is rarely so uniform and simple pixels will not be suitable: this has led to a large literature on feature extraction methods for image data.&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;image-classification&quot;&gt;Image Classification&lt;/h3&gt;
+
+&lt;p&gt;Start with raw video of fish swimming at a video trap in the northern territories of Australia.&lt;/p&gt;
+
+&lt;p&gt;Sample image:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/fish.jpg&quot; alt=&quot;lutjanus johnii at video trap&quot; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Download the video sample from here: https://github.com/Azadehkhojandi/FindingFishwithTensorflowObjectdetectionAPI/blob/master/fish_detection/fishdata/Videos/video1.mp4&lt;/li&gt;
+  &lt;li&gt;Separate the video input into individual frames and then separate the frames into a ‘fish’ or ‘no fish’ folder with manual (time consuming) or automated inspection (use pre-built APIs).&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;An automated intial pass could be done with the Microsoft Computer Vision API or, even, Custom Vision (w/ free tiers).  An exmaple of using the Computer Vision API for this task may be found in &lt;a href=&quot;https://github.com/Azadehkhojandi/computer-vision-fish-frame-proposal/blob/master/classify_and_get_object_frames.py&quot; target=&quot;_blank&quot;&gt;this script on GitHub&lt;/a&gt; (with good instructions on getting access to the API on the Readme). &lt;br /&gt;&lt;br /&gt; 
+This API may not perform well on the raw images, however - can you see why?  How could they be transformed?  Now let’s create our own model.&lt;/p&gt;
+  &lt;ol&gt;
+    &lt;li&gt;Create your own classifier in PyTorch to classify frames as fish/no fish using the parsed data, now in proper folders.&lt;/li&gt;
+    &lt;li&gt;Use &lt;code class=&quot;highlighter-rouge&quot;&gt;transforms&lt;/code&gt; modules from &lt;code class=&quot;highlighter-rouge&quot;&gt;torchvision&lt;/code&gt; and other libraries to:
+      &lt;ul&gt;
+        &lt;li&gt;Try out some data augmentation - (e.g. random vertical flip and blur the images) as well as the more standard “good idea” normalization.&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/li&gt;
+    &lt;li&gt;Make sure you also create an example for &lt;a href=&quot;https://en.wikipedia.org/wiki/Statistical_inference&quot;&gt;inference&lt;/a&gt;.&lt;/li&gt;
+    &lt;li&gt;Use Scikit-learns’s confusion matrix and classification_report to generate metrics.
+      &lt;ol&gt;
+        &lt;li&gt;&lt;a href=&quot;http://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html&quot;&gt;Scikit-learn’s confusion matrix&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;http://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html&quot;&gt;Scikit-learn’s classification report&lt;/a&gt;&lt;/li&gt;
+      &lt;/ol&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;object-detection&quot;&gt;Object Detection&lt;/h3&gt;
+
+&lt;p&gt;Use the Out of Box Faster-RCNN or YOLOv3 solution to identify fish in frames and, for this, you will need to label with bounding boxes - good tools are &lt;a href=&quot;https://github.com/Microsoft/VoTT&quot; target=&quot;_blank&quot;&gt;VoTT&lt;/a&gt; and &lt;a href=&quot;http://www.robots.ox.ac.uk/~vgg/software/via/&quot; target=&quot;_blank&quot;&gt;VGG Image Annotator&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;additional-help&quot;&gt;Additional Help&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;PyTorch forums - &lt;a href=&quot;https://discuss.pytorch.org/&quot;&gt;Ref&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;StackOverflow with &lt;code class=&quot;highlighter-rouge&quot;&gt;pytorch&lt;/code&gt; tag&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;credit&quot;&gt;Credit&lt;/h2&gt;
+
+&lt;p&gt;Thank you to David Crook for providing the initial wording for the excercise intro.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 02 Nov 2018 00:00:00 -0700</pubDate>
+        <link>http://localhost:4000/navigating-ml/level3_practice/</link>
+        <guid isPermaLink="true">http://localhost:4000/navigating-ml/level3_practice/</guid>
+        
+        
+        <category>ds</category>
+        
+        <category>ml</category>
+        
+      </item>
+    
+      <item>
+        <title>Introduction to Python</title>
+        <description>&lt;h1 id=&quot;learning-python-for-data-science&quot;&gt;Learning Python for Data Science&lt;/h1&gt;
+
+&lt;h2 id=&quot;just-starting-out&quot;&gt;Just Starting Out&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Your First Python Video Course&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Intro to Python for Data Science from DataCamp (Time:  ~4 hours; Format - videos and exercises)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.datacamp.com/courses/intro-to-python-for-data-science&quot;&gt;Course&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Python basics&lt;/li&gt;
+  &lt;li&gt;Lists&lt;/li&gt;
+  &lt;li&gt;Functions and packages&lt;/li&gt;
+  &lt;li&gt;Numpy&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;An Introductory Written Tutorial&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A nice course from Software Carpentry on basics of Python programming with a data analysis twist.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://swcarpentry.github.io/python-novice-inflammation/&quot;&gt;Course&lt;/a&gt; (Time:  ~8 hours; Format:  written tutorial and exercises)&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Analyzing Patient Data&lt;/li&gt;
+  &lt;li&gt;Repeating Actions with Loops&lt;/li&gt;
+  &lt;li&gt;Storing Multiple Values in Lists&lt;/li&gt;
+  &lt;li&gt;Analyzing Data from Multiple Files&lt;/li&gt;
+  &lt;li&gt;Making Choices&lt;/li&gt;
+  &lt;li&gt;Creating Functions&lt;/li&gt;
+  &lt;li&gt;Errors and Exceptions&lt;/li&gt;
+  &lt;li&gt;Defensive Programming&lt;/li&gt;
+  &lt;li&gt;Debugging&lt;/li&gt;
+  &lt;li&gt;Command-Line Programs&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;Your Second Python Video Course&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;An entertaining set of videos for the new Python dev with live coding with which to follow along (Time:  ~7hrs; Format - Video/live coding)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/playlist?list=PLwyVx3OgslBW6nIh-g62ZxD5LwmAsG4e5&quot;&gt;Videos&lt;/a&gt; for Python Programming Tutorial for the Absolute Beginner (6 Videos)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;All New Data Scientists Should Learn about Jupyter&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Nice, short video tour of Jupyter Notebooks (Format:  Video)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=jZ952vChhuI&quot;&gt;Course&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;EXERCISE: Go to &lt;a href=&quot;https://notebooks.azure.com&quot;&gt;Azure Notebooks&lt;/a&gt; to check out Jupyter notebooks live and try to follow along with the video.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Programming and Plotting with Python&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Basics with plotting theme throughout and nice exercies from Software Carpentry.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://swcarpentry.github.io/python-novice-gapminder/&quot;&gt;Course&lt;/a&gt; (Time: ~8 hours; Format:  written tutorial and exercises)&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Running and Quitting&lt;/li&gt;
+  &lt;li&gt;Variables and Assignment&lt;/li&gt;
+  &lt;li&gt;Data Types and Type Conversion&lt;/li&gt;
+  &lt;li&gt;Built-in Functions and Help&lt;/li&gt;
+  &lt;li&gt;Libraries&lt;/li&gt;
+  &lt;li&gt;Reading Tabular Data into DataFrames&lt;/li&gt;
+  &lt;li&gt;Pandas DataFrames&lt;/li&gt;
+  &lt;li&gt;Plotting&lt;/li&gt;
+  &lt;li&gt;Lists&lt;/li&gt;
+  &lt;li&gt;For Loops&lt;/li&gt;
+  &lt;li&gt;Looping Over Data Sets&lt;/li&gt;
+  &lt;li&gt;Writing Functions&lt;/li&gt;
+  &lt;li&gt;Variable Scope&lt;/li&gt;
+  &lt;li&gt;Conditionals&lt;/li&gt;
+  &lt;li&gt;Programming Style&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;intermediate&quot;&gt;Intermediate&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;The Data Science Handbook&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;By Jake VanderPlas, this handbook outlines everything you need to know with cool Examples and Applications, on how to get started in Data Science with Python.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://jakevdp.github.io/PythonDataScienceHandbook/&quot;&gt;Book&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Python intro and data sciencey tools - go through in order or skip around&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Python for Data Science and Intro to Jupyter Notebooks and on Jupyter Notebooks on Azure (Time:  ~15 hrs; Format - written tutorial and exercises)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://notebooks.azure.com/rheartpython/libraries/PythonDS101&quot;&gt;Jupyter Notebooks&lt;/a&gt; - Note, solutions to exercises are in the last notebook.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Basics&lt;/li&gt;
+  &lt;li&gt;Data Structures&lt;/li&gt;
+  &lt;li&gt;Functional Programming&lt;/li&gt;
+  &lt;li&gt;Sorting and Pattern Matching&lt;/li&gt;
+  &lt;li&gt;Object Oriented Programming&lt;/li&gt;
+  &lt;li&gt;Basic Difference from 2 to 3&lt;/li&gt;
+  &lt;li&gt;Numerical Computing&lt;/li&gt;
+  &lt;li&gt;Data Analysis with pandas I&lt;/li&gt;
+  &lt;li&gt;Data Analysis with pandas II&lt;/li&gt;
+  &lt;li&gt;Machine Learning I - ML Basics and Data Exploration&lt;/li&gt;
+  &lt;li&gt;Machine Learning II - Supervised and Unsupervised Learning&lt;/li&gt;
+  &lt;li&gt;Machine Learning III - Parameter Tuning and Model Evaluation&lt;/li&gt;
+  &lt;li&gt;Visualization&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;A different take on Python and data science (either of these should cover your Python needs)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;For a more in-depth Python course, this is a good one on edX out of UC San Diego:  &lt;a href=&quot;https://www.edx.org/course/python-data-science-uc-san-diegox-dse200x&quot;&gt;Python for Data Science from edX&lt;/a&gt;.  (Time:  10 weeks/8-10 hours per week)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Basic process of data science&lt;/li&gt;
+  &lt;li&gt;Python and Jupyter notebooks&lt;/li&gt;
+  &lt;li&gt;An applied understanding of how to manipulate and analyze uncurated datasets&lt;/li&gt;
+  &lt;li&gt;Basic statistical analysis and machine learning methods&lt;/li&gt;
+  &lt;li&gt;How to effectively visualize results&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Numerical Python, a.k.a. using the &lt;code class=&quot;highlighter-rouge&quot;&gt;numpy&lt;/code&gt; package, is essential for the data scientist&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;See my &lt;a href=&quot;python/numpy&quot;&gt;python/numpy.html&lt;/a&gt; article for a detailed list of &lt;code class=&quot;highlighter-rouge&quot;&gt;numpy&lt;/code&gt; resources.&lt;/p&gt;
+
+&lt;h2 id=&quot;advanced&quot;&gt;Advanced&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Some books really worth checking out&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;For a great dive into Python in the context of ML check out this book by Sebastian Raschka (you’ll get to write algorithms from scratch in pure Python!): &lt;a href=&quot;https://github.com/rasbt/python-machine-learning-book-2nd-edition&quot;&gt;Python Machine Learning (2nd Ed.)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Not sure if this book is out yet, but Sebastian Raschka is writing a sequel with more deep learning in Python with TensorFlow: &lt;a href=&quot;https://leanpub.com/ann-and-deeplearning&quot;&gt;Introduction to Artificial Neural Networks and Deep Learning&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;“This book is concerned with the nuts and bolts of manipulating, processing, cleaning, and crunching data in Python. My goal is to offer a guide to the parts of the Python programming language and its data-oriented library ecosystem and tools that will equip you to become an effective data analyst. While ‘data analysis’ is in the title of the book, the focus is specifically on Python programming, libraries, and tools as opposed to data analysis methodology. This is the Python programming you need for data analysis.”  &lt;a href=&quot;https://www.amazon.com/Python-Data-Analysis-Wrangling-IPython/dp/1491957662/&quot;&gt;Python for Data Analysis: Data Wrangling with Pandas, NumPy, and IPython by Wes McKinney&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;“Perhaps you would like to give your homemade robot a brain of its own? Make it recognize faces? Or learn to walk around? Or maybe your company has tons of data (user logs, financial data, production data, machine sensor data, hotline stats, HR reports, etc.), and more than likely you could unearth some hidden gems if you just knew where to look.” &lt;a href=&quot;https://www.amazon.com/Hands-Machine-Learning-Scikit-Learn-TensorFlow/dp/1491962291&quot;&gt;Hands-On Machine Learning with Scikit-Learn and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems by Aurélien Géron&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Thu, 01 Nov 2018 00:00:00 -0700</pubDate>
+        <link>http://localhost:4000/navigating-ml/learning-python/</link>
+        <guid isPermaLink="true">http://localhost:4000/navigating-ml/learning-python/</guid>
+        
+        
+        <category>ds</category>
+        
+        <category>ml</category>
+        
+      </item>
+    
+      <item>
+        <title>Introduction to Numpy</title>
+        <description>&lt;h1 id=&quot;a-list-of-numpy-resources&quot;&gt;A List of &lt;code class=&quot;highlighter-rouge&quot;&gt;numpy&lt;/code&gt; resources&lt;/h1&gt;
+
+&lt;p&gt;NumPy stands for Numerical Python.  It’s widely used in Linear Algebra applications and has become a &lt;em&gt;de facto&lt;/em&gt; library for use in Machine Learning.  It uses memory efficiently and is mostly implemented in C, thus is a very efficient option for numerical calculations (see more in Reference #3 by Sebastian Raschka).  I’ve made a list of resources for the &lt;code class=&quot;highlighter-rouge&quot;&gt;numpy&lt;/code&gt; library to help someone new or someone in need of a good reference later on.  It was created by Travis Oliphant in 2005 (also the creator of SciPy).  The package lives on GitHub (&lt;a href=&quot;https://github.com/numpy/numpy&quot;&gt;Link&lt;/a&gt;).&lt;/p&gt;
+
+&lt;h2 id=&quot;listing--in-no-special-order&quot;&gt;Listing.  In no special order.&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Quickstart tutorial.  From the &lt;code class=&quot;highlighter-rouge&quot;&gt;scipy&lt;/code&gt; docs.  Short, but good starting point. &lt;a href=&quot;https://docs.scipy.org/doc/numpy-dev/user/quickstart.html&quot;&gt;Ref&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Introduction to NumPy.  A nice whole chapter on &lt;code class=&quot;highlighter-rouge&quot;&gt;numpy&lt;/code&gt; by Jake VanderPlas. &lt;a href=&quot;https://jakevdp.github.io/PythonDataScienceHandbook/02.00-introduction-to-numpy.html&quot;&gt;Ref&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Introduction to Numpy.  A really nice quick tour as an appendix to a deep learning book by Sebastian Raschka &lt;a href=&quot;https://sebastianraschka.com/pdf/books/dlb/appendix_f_numpy-intro.pdf&quot;&gt;Ref&lt;/a&gt; and as a &lt;a href=&quot;https://github.com/rasbt/deep-learning-book/blob/master/code/appendix_f_numpy-intro/appendix_f_numpy-intro.ipynb&quot;&gt;Notebook&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Numerical Scientific Computing.  Quick tour with exercises by Micheleen Harris.  &lt;a href=&quot;https://notebooks.azure.com/rheartpython/libraries/PythonDS101/html/07.NumericalScientificComputing.ipynb&quot;&gt;Notebook&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;NumPy Practice.  With some nice notes on Linear Algebra operations in &lt;code class=&quot;highlighter-rouge&quot;&gt;numpy&lt;/code&gt; by Tirthajyoti Sarkar.  &lt;a href=&quot;https://github.com/tirthajyoti/PythonMachineLearning/blob/master/Pandas%20and%20Numpy/Numpy%20practice.ipynb&quot;&gt;Notebook&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;a-listing-of-linear-algebra-resources-to-go-along-with-this&quot;&gt;A listing of Linear Algebra resources to go along with this&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Stanford comprehensive Linear Algebra review document by Zico Kolter.  &lt;a href=&quot;http://web.stanford.edu/class/cs224n/readings/cs229-linalg.pdf&quot;&gt;Ref&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Linear Algebra Review (Andrew Ng).&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;Matrices and Vectors. &lt;a href=&quot;https://www.youtube.com/watch?v=Dft1cqjwlXE&quot;&gt;Video&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;Addition And Scalar Multiplication. &lt;a href=&quot;https://www.youtube.com/watch?v=4WP6jVGIn7M&quot;&gt;Video&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;Matrix Vector Multiplication.  &lt;a href=&quot;https://www.youtube.com/watch?v=gPegoVYp64w&quot;&gt;Video&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;Matrix-Matrix Multiplication.  &lt;a href=&quot;https://www.youtube.com/watch?v=_lrHXJRukMw&quot;&gt;Video&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;Matrix Multiplication Properties.  &lt;a href=&quot;https://www.youtube.com/watch?v=c7GhnL2N--I&quot;&gt;Video&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;Inverse And Transpose.  &lt;a href=&quot;https://www.youtube.com/watch?v=7snro4M6ukk&quot;&gt;Video&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Linear Algebra youtube channel by Khan Academy &lt;a href=&quot;https://www.youtube.com/channel/UCGYSKl6e3HM0PP7QR35Crug&quot;&gt;Videos&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Coding the Matrix.  &lt;a href=&quot;http://codingthematrix.com/&quot;&gt;Book&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Exercise:  Follow along with these courses by doing things concurrently in &lt;code class=&quot;highlighter-rouge&quot;&gt;numpy&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;There are likely many more great resources out there so feel free to create an issue on this &lt;a href=&quot;https://github.com/michhar/navigating-ml/issues&quot;&gt;GitHub repo&lt;/a&gt; letting me know about yours or others.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 31 Oct 2018 00:00:00 -0700</pubDate>
+        <link>http://localhost:4000/navigating-ml/numpy_intro/</link>
+        <guid isPermaLink="true">http://localhost:4000/navigating-ml/numpy_intro/</guid>
+        
+        
+        <category>ds</category>
+        
+        <category>ml</category>
+        
+      </item>
+    
+  </channel>
+</rss>
